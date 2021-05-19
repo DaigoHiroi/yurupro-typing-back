@@ -8,4 +8,4 @@ Echo
 ### 一応、macでGO言語をインストールすること
 
 ### 使用方法
-ダウンロードして`docker-compose up`
+ダウンロードして`docker-compose up -d` で開発環境構築完了
