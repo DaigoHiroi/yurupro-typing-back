@@ -5,6 +5,8 @@ import (
     "github.com/labstack/echo"
     "github.com/labstack/echo/middleware"
     "app/handler"
+    "app/models/users"
+    "app/models/user"
 )
 
 func main() {
@@ -18,6 +20,8 @@ func main() {
     r.Use(middleware.JWT([]byte("secret")))
     r.GET("/welcome", handler.Restricted())
 
+    e.GET("/users/:id", user.SelectUser)
+    e.GET("/users", users.SelectUsers)
 
     e.GET("/", func(c echo.Context) error {
         return c.String(http.StatusOK, "Hello galaxy!")
