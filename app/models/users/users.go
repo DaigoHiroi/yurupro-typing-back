@@ -1,10 +1,12 @@
-package models/users
+package users
 
 import (
-	"github.com/labstack/echo/v4"
+	//"github.com/labstack/echo/v4"
+	"github.com/labstack/echo"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"net/http"
+	"fmt"
 )
 
 type (
@@ -19,11 +21,13 @@ type (
 )
 
 var (
-	dsn = "user:password@tcp(127.0.0.1:3306)/echo?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn = "echo:golang@tcp(127.0.0.1:3306)/echo?charset=utf8mb4&parseTime=True&loc=Local"
 )
 
 func SelectUsers(c echo.Context) error {
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+
+    fmt.Println("%v", err)
 
 	if err != nil {
 		panic("failed to connect database")

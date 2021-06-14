@@ -1,7 +1,8 @@
-package models/user
+package user
 
 import (
-	"github.com/labstack/echo/v4"
+	//"github.com/labstack/echo/v4"
+	"github.com/labstack/echo"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"net/http"
@@ -19,7 +20,7 @@ type (
 )
 
 var (
-	dsn = "user:password@tcp(127.0.0.1:3306)/echo?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn = "echo:golang@tcp(127.0.0.1:3306)/echo?charset=utf8mb4&parseTime=True&loc=Local"
 )
 
 func SelectUser(c echo.Context) error {
