@@ -1,0 +1,23 @@
+#
+# These groups are read by MariaDB server.
+# Use it for options that only the server (but not clients) should see
+#
+# See the examples of server my.cnf files in /usr/share/mysql/
+#
+
+# this is read by the standalone daemon and embedded servers
+[server]
+
+# this is only for the mysqld standalone daemon
+[mysqld]
+character-set-server=utf8
+datadir=/var/lib/mysql
+socket=/var/lib/mysql/mysql.sock
+symbolic-links=0
+key_buffer_size=512M
+max_connections=1000
+wait_timeout=3600
+query_cache_size=128
+query_cache_limit=128M
+innodb_file_per_table=1
+innodb_buffer_pool_size=128M

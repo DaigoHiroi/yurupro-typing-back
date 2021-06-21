@@ -9,9 +9,12 @@ services:
       - ./app:/go/src/app
     ports:
       - "5555:8080"
+    stdin_open: true
     tty: true #コンテナ永続化
     depends_on:
       - mysql
+    networks:
+      - go-network
 
   #mysql:
   #  build: ./mysql/
@@ -29,12 +32,26 @@ services:
   #    - "3355:3306"
   mysql:
     container_name: mysql
-    image: mysql:8.0
+    #image: mysql:8.0
     # 従来の認証方式にしておく
-    command: --default-authentication-plugin=mysql_native_password
+    #command: --default-authentication-plugin=mysql_native_password
+    #command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    #volumes:
+    #  - db-store:/var/lib/mysql:cached
+    #  - ./settings/my.cnf:/etc/mysql/my.cnf
+    #  - ./settings/server.cnf:/etc/mysql/conf.d/server.cnf
+    #  - ./logs:/var/log/mysql
+    image: mysql:8.0
+    restart: always
     volumes:
-      - db-store:/var/lib/mysql:cached
-      - ./logs:/var/log/mysql
+      - db-data:/var/lib/mysql
+      - ./settings/my.cnf:/etc/mysql/conf.d/my.cnf
+      #- /var/data/mysql:/var/lib/mysql
+      #- /etc/mysql:/etc/mysql
+      #- ./mysql-files:/var/lib/mysql-files
+    networks:
+      - go-network
     environment:
       - MYSQL_DATABASE=echo
       - MYSQL_ROOT_PASSWORD=golang
@@ -44,5 +61,10 @@ services:
     ports:
       - "3355:3306"
 
+networks:
+  go-network:
+    driver: bridge
+
 volumes: # データの永続化
-  db-store:
+  db-data:
+    driver: local
