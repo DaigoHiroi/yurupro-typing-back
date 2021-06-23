@@ -21,13 +21,13 @@ type (
 
 var (
 	//dsn = "echo:golang@tcp(127.0.0.1:3306)/echo?charset=utf8mb4&parseTime=True&loc=Local"
-	dsn = "echo:golang@tcp(127.0.0.1:3306)/echo?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn = "echo:golang@tcp(mysql:3306)/echo?charset=utf8mb4&parseTime=True&loc=Local"
 )
 
 func SelectUsers(c echo.Context) error {
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
-    return c.String(http.StatusBadRequest, "Request is failed: "+err.Error())
+    // return c.String(http.StatusBadRequest, "Request is failed: "+err.Error())
 
 	if err != nil {
 		panic("failed to connect database")
