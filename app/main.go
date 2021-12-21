@@ -1,70 +1,52 @@
 package main
 
 import (
-    "fmt"
-    "net/http"
-    "github.com/labstack/echo"
-    "github.com/labstack/echo/middleware"
-    "app/handler"
-    "app/models/users"
-    "app/models/user"
-    "time"
-    "github.com/jinzhu/gorm"
+	"app/conf"
+	"app/interactor"
+	"app/presenter/http/middleware"
+	"app/presenter/http/router"
+	"flag"
+	"fmt"
+	_ "github.com/jinzhu/gorm"
+	"github.com/labstack/echo/v4"
 )
 
+//Dockerコンテナで実行する時(production.confをもとに起動するとき)は起動時に-serverを指定
+var runServer = flag.Bool("server", false, "production is -server option require")
+
 func main() {
-    db := sqlConnect()
-    defer db.Close()
+	flag.Parse()
+	conf.NewConfig(*runServer)
 
-    e := echo.New()
+	// Echo instance
+	e := echo.New()
+	conn := conf.NewDBConnection()
+	defer func() {
+		if err := conn.Close(); err != nil {
+			e.Logger.Fatal(fmt.Sprintf("Failed to close: %v", err))
+		}
+	}()
+	i := interactor.NewInteractor(conn)
+	h := i.NewAppHandler()
 
-    e.Use(middleware.Logger())
-    e.Use(middleware.Recover())
+	router.NewRouter(e, h)
+	middleware.NewMiddleware(e)
+	if err := e.Start(fmt.Sprintf(":%d", conf.Current.Server.Port)); err != nil {
+		e.Logger.Fatal(fmt.Sprintf("Failed to start: %v", err))
+	}
 
-    e.POST("/login", handler.Login())
-    r := e.Group("/restricted")
-    r.Use(middleware.JWT([]byte("secret")))
-    r.GET("/welcome", handler.Restricted())
+	// Middleware
+	// e.Use(middleware.Logger())
+	//e.Use(middleware.Recover())
 
-    e.GET("/users/:id", user.SelectUser)
-    e.GET("/users", users.SelectUsers)
+	// Routes
+	//e.GET("/", hello)
 
-    e.GET("/", func(c echo.Context) error {
-        return c.String(http.StatusOK, "Hello galaxyff")
-    })
-    e.Logger.Fatal(e.Start(":8080"))
+	// Start server
+	//e.Logger.Fatal(e.Start(":8080"))
 }
 
-func sqlConnect() (database *gorm.DB) {
-    DBMS := "mysql"
-    USER := "echo"
-    PASS := "golang"
-    PROTOCOL := "tcp(mysql:3306)"
-    DBNAME := "echo"
-
-    CONNECT := USER + ":" + PASS + "@" + PROTOCOL + "/" + DBNAME + "?charset=utf8&parseTime=true&loc=Asia%2FTokyo"
-
-    count := 0
-    db, err := gorm.Open(DBMS, CONNECT)
-    if err != nil {
-        for {
-            if err == nil {
-                fmt.Println("")
-                break
-            }
-            fmt.Print(".")
-            time.Sleep(time.Second)
-            count++
-            if count > 10 {
-                fmt.Println("")
-                fmt.Println("DB接続失敗")
-                fmt.Println(err.Error())
-                panic(err)
-            }
-            db, err = gorm.Open(DBMS, CONNECT)
-        }
-    }
-    fmt.Println("DB接続成功")
-
-    return db
-}
+// Handler
+//func hello(c echo.Context) error {
+//	return c.String(http.StatusOK, "Hello World2!")
+//}

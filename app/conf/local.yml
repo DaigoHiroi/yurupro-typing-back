@@ -1,0 +1,11 @@
+server :
+  port : "8080"
+  mock : false
+
+# mysql
+database :
+  host : "mysql"
+  port : "3306"
+  user : "echo"
+  password : "golang"
+  database : "echo"

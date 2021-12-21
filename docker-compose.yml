@@ -39,14 +39,14 @@ services:
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     #volumes:
     #  - db-store:/var/lib/mysql:cached
-    #  - ./settings/my.cnf:/etc/mysql/my.cnf
-    #  - ./settings/server.cnf:/etc/mysql/conf.d/server.cnf
+    #  - ./conf/my.cnf:/etc/mysql/my.cnf
+    #  - ./conf/server.cnf:/etc/mysql/conf.d/server.cnf
     #  - ./logs:/var/log/mysql
     image: mysql:8.0
     restart: always
     volumes:
       - db-data:/var/lib/mysql
-      - ./settings/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./conf/my.cnf:/etc/mysql/conf.d/my.cnf
       #- /var/data/mysql:/var/lib/mysql
       #- /etc/mysql:/etc/mysql
       #- ./mysql-files:/var/lib/mysql-files
