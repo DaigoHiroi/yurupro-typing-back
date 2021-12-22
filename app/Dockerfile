@@ -12,15 +12,13 @@ RUN apk update && \
     go get github.com/pilu/fresh
     # go get github.com/go-sql-driver/mysql@latest
 
-# RUN go get github.com/jinzhu/gorm
+#RUN go get github.com/jinzhu/gorm
 
-#RUN go get -tags 'mysql' -u github.com/golang-migrate/migrate/v4/cmd/migrate/
+# RUN go get -tags 'mysql' -u github.com/golang-migrate/migrate/v4/cmd/migrate/
 # RUN go get github.com/golang-migrate/migrate/v4/cmd/migrate
 
-# RUN go get github.com/spf13/viper
-# RUN go get -u github.com/go-sql-driver/mysql
-
-
+#RUN go get github.com/spf13/viper
+#RUN go get -u github.com/o-sql-driver/mysql
 
 # oxequa/realizeが不要かも
 #RUN go get -u github.com/oxequa/realize \

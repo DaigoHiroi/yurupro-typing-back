@@ -1,14 +1,16 @@
 package main
 
 import (
-	"app/conf"
-	"app/interactor"
-	"app/presenter/http/middleware"
-	"app/presenter/http/router"
 	"flag"
 	"fmt"
 	_ "github.com/jinzhu/gorm"
 	"github.com/labstack/echo/v4"
+	"net/http"
+
+	conf "app/conf"
+	interactor "app/interactor"
+	middleware "app/presenter/http/middleware"
+	router "app/presenter/http/router"
 )
 
 //Dockerコンテナで実行する時(production.confをもとに起動するとき)は起動時に-serverを指定
@@ -47,6 +49,6 @@ func main() {
 }
 
 // Handler
-//func hello(c echo.Context) error {
-//	return c.String(http.StatusOK, "Hello World2!")
-//}
+func hello(c echo.Context) error {
+	return c.String(http.StatusOK, "Hello World2!")
+}
